@@ -28,3 +28,23 @@ export function getParam(param) {
   const urlParams = new URLSearchParams(queryString);
   return urlParams.get(param);
 }
+
+export function renderWithTemplate(selector, file) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  fetch(file)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.text();
+    })
+    .then(html => {
+      container.innerHTML = html;
+    })
+    .catch(error => {
+      console.error(`Failed to load ${file}:`, error);
+      container.innerHTML = `<p>Footer could not be loaded</p>`;
+    });
+}
